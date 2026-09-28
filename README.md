@@ -11,7 +11,7 @@ Aplikasi BeliLapak dirancang untuk membantu proses penjualan produk fashion seca
 ## Anggota Kelompok
 1. Nama Anggota 1 - Product Owner / System Analyst
 2. akmal - Scrum Master / Project Manager
-3. Nama Anggota 3 - UI/UX Designer
+3. Fuadi - UI/UX Designer
 4. Matsna rizal M 4 - Frontend Developer
 5. waqidi - Backend Developer
 6. akmal - QA / Tester & Dokumentasi / Branding
