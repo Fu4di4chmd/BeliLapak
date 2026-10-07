@@ -6,22 +6,24 @@ class UserModel {
     public function __construct($db) {
         $this->conn = $db;
     }
+public function register($nama, $email, $password, $alamat, $no_telp)
+{
+    $query = "INSERT INTO users
+              (nama, email, password, alamat, no_telp)
+              VALUES
+              (:nama, :email, :password, :alamat, :no_telp)";
 
-    public function login($email, $password) {
-        $query = "SELECT id, nama, email, password, role FROM " . $this->table_name . " WHERE email = :email LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
+    $stmt = $this->conn->prepare($query);
 
-        if($stmt->rowCount() > 0) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            // Untuk tahap awal (password belum di-hash), pakai === 
-            // Nanti ubah ke password_verify() jika sudah pakai hashing
-            if($password === $user['password']) {
-                return $user;
-            }
-        }
-        return false;
-    }
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt->bindValue(':nama', $nama);
+    $stmt->bindValue(':email', $email);
+    $stmt->bindValue(':password', $hashedPassword);
+    $stmt->bindValue(':alamat', $alamat);
+    $stmt->bindValue(':no_telp', $no_telp);
+
+    return $stmt->execute();
+}
 }
 ?>
