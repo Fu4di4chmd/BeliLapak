@@ -118,8 +118,6 @@ class AuthController
 
         session_unset();
         session_destroy();
-
-        header("Location: /src/views/auth/login.php");
-        exit;
-    }
+header("Location: /BeliLapak/src/views/auth/login.php?register=success");
+exit; }
 }
