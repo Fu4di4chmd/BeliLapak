@@ -20,57 +20,42 @@ class AuthController
     // =========================
     public function register()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return null;
+        $error = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nama = trim($_POST['nama'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $password = $_POST['password'] ?? '';
+            $alamat = trim($_POST['alamat'] ?? '');
+            $no_telp = trim($_POST['no_telp'] ?? '');
+
+            // Validasi data kosong
+            if (empty($nama) || empty($email) || empty($password) || empty($alamat) || empty($no_telp)) {
+                $error = "Semua data wajib diisi.";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                // Validasi email
+                $error = "Format email tidak valid.";
+            } elseif (strlen($password) < 6) {
+                // Validasi password
+                $error = "Kata sandi minimal 6 karakter.";
+            } elseif ($this->userModel->findByEmail($email)) {
+                // Cek email sudah terdaftar atau belum
+                $error = "Email sudah terdaftar.";
+            } else {
+                // Simpan user
+                $hasil = $this->userModel->register($nama, $email, $password, $alamat, $no_telp);
+
+                if ($hasil) {
+                    header("Location: index.php?action=login&register=success");
+                    exit;
+                }
+
+                $error = "Registrasi gagal.";
+            }
         }
 
-        $nama = trim($_POST['nama'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $password = $_POST['password'] ?? '';
-        $alamat = trim($_POST['alamat'] ?? '');
-        $no_telp = trim($_POST['no_telp'] ?? '');
-
-        // Validasi data kosong
-        if (
-            empty($nama) ||
-            empty($email) ||
-            empty($password) ||
-            empty($alamat) ||
-            empty($no_telp)
-        ) {
-            return "Semua data wajib diisi.";
-        }
-
-        // Validasi email
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return "Format email tidak valid.";
-        }
-
-        // Validasi password
-        if (strlen($password) < 6) {
-            return "Kata sandi minimal 6 karakter.";
-        }
-
-        // Cek email sudah terdaftar atau belum
-        if ($this->userModel->findByEmail($email)) {
-            return "Email sudah terdaftar.";
-        }
-
-        // Simpan user
-        $hasil = $this->userModel->register(
-            $nama,
-            $email,
-            $password,
-            $alamat,
-            $no_telp
-        );
-
-        if ($hasil) {
-            header("Location: /src/views/auth/login.php?register=success");
-            exit;
-        }
-
-        return "Registrasi gagal.";
+        // Tampilkan view register dan kirim variabel $error
+        require_once __DIR__ . '/../views/auth/register.php';
     }
 
     // =========================
@@ -78,33 +63,36 @@ class AuthController
     // =========================
     public function login()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return null;
+        $error = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = trim($_POST['email'] ?? '');
+            $password = $_POST['password'] ?? '';
+
+            if (empty($email) || empty($password)) {
+                $error = "Email dan password wajib diisi.";
+            } else {
+                $user = $this->userModel->login($email, $password);
+
+                if (!$user) {
+                    $error = "Email atau password salah.";
+                } else {
+                    if (session_status() === PHP_SESSION_NONE) {
+                        session_start();
+                    }
+
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['nama'] = $user['nama'];
+                    $_SESSION['role'] = $user['role'];
+
+                    header("Location: index.php?action=katalog");
+                    exit;
+                }
+            }
         }
 
-        $email = trim($_POST['email'] ?? '');
-        $password = $_POST['password'] ?? '';
-
-        if (empty($email) || empty($password)) {
-            return "Email dan password wajib diisi.";
-        }
-
-        $user = $this->userModel->login($email, $password);
-
-        if (!$user) {
-            return "Email atau password salah.";
-        }
-
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['nama'] = $user['nama'];
-        $_SESSION['role'] = $user['role'];
-
-        header("Location: /src/index.php");
-        exit;
+        // Tampilkan view login dan kirim variabel $error
+        require_once __DIR__ . '/../views/auth/login.php';
     }
 
     // =========================
@@ -119,7 +107,7 @@ class AuthController
         session_unset();
         session_destroy();
 
-        header("Location: /src/views/auth/login.php");
+        header("Location: index.php?action=login");
         exit;
     }
 }
