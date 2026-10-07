@@ -1,0 +1,183 @@
+/* =========================================
+   VARIABEL & RESET GLOBAL
+========================================= */
+:root {
+    --primary-color: #E91E63;
+    --text-dark: #333333;
+    --text-gray: #757575;
+    --bg-light: #F5F5F5;
+    --white: #FFFFFF;
+    --border-color: #EEEEEE;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--white);
+    min-height: 100vh;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* =========================================
+   HEADER & NAVIGASI DESKTOP
+========================================= */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--white);
+}
+
+.logo {
+    color: var(--primary-color);
+    font-size: 28px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.search-box {
+    flex-grow: 1;
+    margin: 0 50px;
+    display: flex;
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.search-box button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 0 25px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+/* =========================================
+   KONTEN & BANNER PROMO
+========================================= */
+main {
+    padding: 30px 40px;
+}
+
+.promo-banner {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.promo-banner h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.btn-promo {
+    display: inline-block;
+    background: var(--white);
+    color: var(--primary-color);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.section-title h3 {
+    font-size: 20px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   GRID KATALOG PRODUK (PPL-04)
+========================================= */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 20px;
+}
+
+.product-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: var(--white);
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background-color: #f9f9f9;
+}
+
+.product-info {
+    padding: 15px;
+}
+
+.product-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    height: 40px;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.product-stats {
+    font-size: 12px;
+    color: var(--text-gray);
+}
