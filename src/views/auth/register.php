@@ -121,6 +121,7 @@ $error = $auth->register();
         <button
             type="submit"
             class="btn-primary"
+            
         >
             Daftar
         </button>

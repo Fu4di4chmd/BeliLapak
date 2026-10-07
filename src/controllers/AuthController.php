@@ -30,7 +30,6 @@ class AuthController
         $alamat = trim($_POST['alamat'] ?? '');
         $no_telp = trim($_POST['no_telp'] ?? '');
 
-        // Validasi data kosong
         if (
             empty($nama) ||
             empty($email) ||
@@ -41,22 +40,18 @@ class AuthController
             return "Semua data wajib diisi.";
         }
 
-        // Validasi email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return "Format email tidak valid.";
         }
 
-        // Validasi password
         if (strlen($password) < 6) {
             return "Kata sandi minimal 6 karakter.";
         }
 
-        // Cek email sudah terdaftar atau belum
         if ($this->userModel->findByEmail($email)) {
             return "Email sudah terdaftar.";
         }
 
-        // Simpan user
         $hasil = $this->userModel->register(
             $nama,
             $email,
@@ -66,7 +61,7 @@ class AuthController
         );
 
         if ($hasil) {
-            header("Location: /src/views/auth/login.php?register=success");
+            header("Location: /BeliLapak/src/views/auth/login.php?register=success");
             exit;
         }
 
@@ -103,7 +98,7 @@ class AuthController
         $_SESSION['nama'] = $user['nama'];
         $_SESSION['role'] = $user['role'];
 
-        header("Location: /src/index.php");
+        header("Location: /BeliLapak/src/index.php");
         exit;
     }
 
@@ -118,6 +113,8 @@ class AuthController
 
         session_unset();
         session_destroy();
-header("Location: /BeliLapak/src/views/auth/login.php?register=success");
-exit; }
+
+        header("Location: /BeliLapak/src/views/auth/login.php");
+        exit;
+    }
 }
