@@ -11,32 +11,70 @@ class AdminController {
         $this->productModel = new ProductModel($db);
     }
 
-    // Menampilkan daftar semua produk (Tabel Kelola Produk)
     public function index() {
         $products = $this->productModel->getAllProducts();
         require_once __DIR__ . '/../views/admin/manage_products.php';
     }
 
-    // Memproses data tambah produk baru
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Ambil data POST (nama_produk, harga, stok, berat_gram, gambar)
-            // Panggil $this->productModel->createProduct(...)
-            // Redirect kembali ke index.php?action=admin_produk
+            $nama_produk = trim($_POST['nama_produk'] ?? '');
+            $deskripsi   = trim($_POST['deskripsi'] ?? ''); 
+            $harga       = trim($_POST['harga'] ?? 0);
+            $stok        = trim($_POST['stok'] ?? 0);
+            $berat_gram  = trim($_POST['berat_gram'] ?? 0);
+            
+            $gambar = '';
+            if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $_FILES['gambar']['tmp_name'];
+                $fileName    = time() . '_' . $_FILES['gambar']['name']; 
+                $uploadDir   = __DIR__ . '/../static/uploads/';
+                
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                $destPath = $uploadDir . $fileName;
+                if (move_uploaded_file($fileTmpPath, $destPath)) {
+                    $gambar = $fileName;
+                }
+            }
+
+            $this->productModel->createProduct($nama_produk, $deskripsi, $harga, $stok, $berat_gram, $gambar);
+            header("Location: index.php?action=manage_products&status=success");
+            exit;
         }
     }
 
-    // Memproses update produk (termasuk fitur PPL-03 Kelola Stok nantinya)
     public function update($id) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Logika update produk
+            $nama_produk = trim($_POST['nama_produk'] ?? '');
+            $deskripsi   = trim($_POST['deskripsi'] ?? ''); 
+            $harga       = trim($_POST['harga'] ?? 0);
+            $stok        = trim($_POST['stok'] ?? 0);
+            $berat_gram  = trim($_POST['berat_gram'] ?? 0);
+            
+            $gambar_baru = null;
+            if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+                $fileName = time() . '_' . $_FILES['gambar']['name'];
+                $uploadDir = __DIR__ . '/../static/uploads/';
+                $destPath = $uploadDir . $fileName;
+                
+                if (move_uploaded_file($_FILES['gambar']['tmp_name'], $destPath)) {
+                    $gambar_baru = $fileName;
+                }
+            }
+
+            $this->productModel->updateProduct($id, $nama_produk, $deskripsi, $harga, $stok, $berat_gram, $gambar_baru);
+            header("Location: index.php?action=manage_products&status=updated");
+            exit;
         }
     }
 
-    // Menghapus produk
     public function delete($id) {
-        // Panggil $this->productModel->deleteProduct($id)
-        // Redirect kembali ke index.php?action=admin_produk
+        $this->productModel->deleteProduct($id);
+        header("Location: index.php?action=manage_products&status=deleted");
+        exit;
     }
 }
 ?>

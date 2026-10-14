@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-// Tangkap parameter action dari URL (misal: index.php?action=katalog)
+
 $action = isset($_GET['action']) ? $_GET['action'] : 'katalog';
 
 switch ($action) {
@@ -30,11 +30,38 @@ switch ($action) {
         $controller = new AuthController();
         $controller->register();
         break;
+        
+    case 'logout':
+        require_once 'controllers/AuthController.php';
+        $controller = new AuthController();
+        $controller->logout();
+        break;
+
+    case 'admin_dashboard':
+        require_once 'views/admin/dashboard.php';
+        break;
+
+    case 'manage_products':
+        require_once 'controllers/AdminController.php';
+        $admin = new AdminController();
+        $admin->index();
+        break;
+
+    case 'store_product':
+        require_once 'controllers/AdminController.php';
+        $admin = new AdminController();
+        $admin->store();
+        break;
+
+    case 'delete_product':
+        require_once 'controllers/AdminController.php';
+        $admin = new AdminController();
+        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $admin->delete($id);
+        break;
 
     default:
         echo "404 Halaman Tidak Ditemukan";
         break;
-    
-    
 }
 ?>

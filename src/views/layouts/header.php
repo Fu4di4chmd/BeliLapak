@@ -39,7 +39,7 @@
                 Favorit
             </a>
 
-            <a href="/src/index.php?action=login">
+            <a href="/PPL/BeliLapak/src/index.php?action=login">
                 Masuk / Daftar
             </a>
         </div>
