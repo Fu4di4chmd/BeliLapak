@@ -6,7 +6,7 @@
 
     <title>BeliLapak - Katalog Produk</title>
 
-    <link rel="stylesheet" href="/PPL/BeliLapak/src/static/css/style.css">
+    <link rel="stylesheet" href="/BeliLapak/src/static/css/style.css">
 </head>
 
 <body>
@@ -39,7 +39,7 @@
                 Favorit
             </a>
 
-            <a href="/PPL/BeliLapak/src/index.php?action=login">
+            <a href="/BeliLapak/src/index.php?action=login">
                 Masuk / Daftar
             </a>
         </div>
