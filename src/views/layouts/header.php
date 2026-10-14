@@ -7,6 +7,7 @@
     <title>BeliLapak - Katalog Produk</title>
 
     <link rel="stylesheet" href="/BeliLapak/src/static/css/style.css">
+    <!-- <link rel="stylesheet" href="../src/static/css/style.css"> -->
 </head>
 
 <body>
@@ -40,6 +41,7 @@
             </a>
 
             <a href="/BeliLapak/src/index.php?action=login">
+            <!-- <a href="../src/index.php?action=login"> -->
                 Masuk / Daftar
             </a>
         </div>

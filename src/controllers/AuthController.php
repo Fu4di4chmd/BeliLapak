@@ -40,7 +40,7 @@ class AuthController
                 $error = "Registrasi gagal.";
             }
         }
-        require_once __DIR__ . '/../views/auth/register.php';
+        require_once __DIR__ . '../views/auth/register.php';
     }
 
     public function login()
