@@ -59,6 +59,24 @@ switch ($action) {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         $admin->delete($id);
         break;
+    
+    case 'cart':
+        require_once 'controllers/CartController.php';
+        $controller = new CartController();
+        $controller->index();
+        break;
+
+    case 'cart_add':
+        require_once 'controllers/CartController.php';
+        $controller = new CartController();
+        $controller->add($_GET['id']);
+        break;
+
+    case 'cart_remove':
+        require_once 'controllers/CartController.php';
+        $controller = new CartController();
+        $controller->remove($_GET['id']);
+        break;
 
     default:
         echo "404 Halaman Tidak Ditemukan";
