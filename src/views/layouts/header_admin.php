@@ -16,6 +16,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     <title><?= $page_title ?? 'Dashboard Admin - BeliLapak'; ?></title>
     <!-- Path CSS untuk admin (sesuaikan jika file style.css ada di folder static/css/) -->
     <link rel="stylesheet" href="static/css/style.css?v=<?= time(); ?>">
+    
 </head>
 <body class="admin-body">
 
