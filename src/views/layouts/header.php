@@ -6,7 +6,7 @@
 
     <title>BeliLapak - Katalog Produk</title>
 
-    <link rel="stylesheet" href="/src/static/css/style.css">
+    <link rel="stylesheet" href="/PPL/BeliLapak/src/static/css/style.css">
 </head>
 
 <body>
