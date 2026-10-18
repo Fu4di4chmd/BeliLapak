@@ -77,6 +77,9 @@ switch ($action) {
         $controller = new CartController();
         $controller->remove($_GET['id']);
         break;
+    case 'profile':
+        require_once __DIR__ . '/views/auth/profile.php';
+        break;
 
     default:
         echo "404 Halaman Tidak Ditemukan";

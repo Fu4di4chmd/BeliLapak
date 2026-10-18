@@ -17,7 +17,7 @@
         <?php if (!empty($produk_list)): ?>
             <?php foreach ($produk_list as $produk): ?>
             <a href="index.php?action=detail&id=<?php echo $produk['id']; ?>" class="product-card">
-                <img src="static/uploads/<?php echo !empty($produk['gambar']) ? $produk['gambar'] : 'default.jpg'; ?>" alt="<?php echo htmlspecialchars($produk['nama_produk']); ?>" class="product-img">
+                <img src="static/uploads/uploads/<?php echo !empty($produk['gambar']) ? $produk['gambar'] : 'default.jpg'; ?>" alt="<?php echo htmlspecialchars($produk['nama_produk']); ?>" class="product-img">
                 <div class="product-info">
                     <div class="product-title"><?php echo htmlspecialchars($produk['nama_produk']); ?></div>
                     <div class="product-price">Rp<?php echo number_format($produk['harga'], 0, ',', '.'); ?></div>

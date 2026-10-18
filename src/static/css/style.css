@@ -977,3 +977,89 @@ main {
 .summary-total strong { color: var(--primary); font-size: 20px; }
 .checkout-btn { width: 100%; padding: 13px; border: none; border-radius: 8px; background: var(--primary); color: white; font-weight: 700; cursor: pointer; }
 .checkout-btn:hover { background: var(--primary-dark); }
+/* =========================================
+   PROFILE PAGE
+========================================= */
+
+.profile-big-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #fde7ef;
+
+    font-size: 34px;
+}
+
+.profile-info {
+    margin-top: 20px;
+}
+
+.profile-item {
+    padding: 14px 0;
+
+    border-bottom: 1px solid var(--border-color);
+}
+
+.profile-item span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 13px;
+
+    color: var(--text-gray);
+}
+
+.profile-item strong {
+    font-size: 15px;
+
+    color: var(--text-dark);
+}
+
+.profile-actions {
+    margin-top: 25px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.profile-actions .btn-primary {
+    display: block;
+
+    text-align: center;
+
+    text-decoration: none;
+}
+
+.btn-logout {
+    display: block;
+
+    padding: 13px 20px;
+
+    border: 1px solid #d32f2f;
+    border-radius: 8px;
+
+    color: #d32f2f;
+
+    text-align: center;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.btn-logout:hover {
+    background-color: #d32f2f;
+
+    color: white;
+}
