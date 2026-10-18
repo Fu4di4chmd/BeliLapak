@@ -1063,3 +1063,706 @@ main {
 
     color: white;
 }
+/* =========================================
+   ADMIN LAYOUT
+========================================= */
+
+.admin-body {
+    margin: 0;
+    background-color: #f5f6f8;
+    color: var(--text-dark);
+}
+
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* SIDEBAR */
+
+.admin-sidebar {
+    width: 240px;
+    min-height: 100vh;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    padding: 28px 20px;
+
+    background-color: #ffffff;
+
+    border-right: 1px solid #eeeeee;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-brand {
+    color: var(--primary-color);
+
+    font-size: 28px;
+    font-weight: 700;
+
+    margin-bottom: 5px;
+}
+
+.sidebar-label {
+    color: #999999;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 28px;
+}
+
+
+/* MENU */
+
+.sidebar-menu {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    height: 100%;
+}
+
+.sidebar-menu li {
+    width: 100%;
+}
+
+.sidebar-menu a {
+    display: block;
+
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    color: #555555;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    transition: 0.2s;
+}
+
+.sidebar-menu a:hover {
+    background-color: #fde7ef;
+
+    color: var(--primary-color);
+}
+
+.sidebar-menu a.active {
+    background-color: var(--primary-color);
+
+    color: white;
+}
+
+
+/* LOGOUT */
+
+.logout-item {
+    margin-top: auto;
+}
+
+.logout-item a {
+    border: 1px solid #eeeeee;
+
+    color: #d32f2f;
+
+    text-align: center;
+}
+
+.logout-item a:hover {
+    background-color: #fff0f0;
+
+    color: #d32f2f;
+}
+
+
+/* MAIN */
+
+.admin-main {
+    width: calc(100% - 240px);
+
+    margin-left: 240px;
+
+    min-height: 100vh;
+}
+
+
+/* TOP HEADER */
+
+.admin-header {
+    min-height: 80px;
+
+    padding: 0 35px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid #eeeeee;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-header h2 {
+    margin: 0;
+
+    font-size: 22px;
+
+    color: var(--text-dark);
+}
+
+
+/* ADMIN PROFILE */
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.admin-avatar {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    background-color: #fde7ef;
+
+    color: var(--primary-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+}
+
+.admin-profile-text span {
+    display: block;
+
+    font-size: 12px;
+
+    color: var(--text-gray);
+}
+
+.admin-profile-text strong {
+    font-size: 14px;
+
+    color: var(--text-dark);
+}
+
+
+/* CONTENT */
+
+.admin-content {
+    padding: 35px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+    .admin-sidebar {
+        width: 190px;
+    }
+
+    .admin-main {
+        width: calc(100% - 190px);
+        margin-left: 190px;
+    }
+}
+/* =========================================
+   ADMIN DASHBOARD CONTENT
+========================================= */
+
+.dashboard-welcome {
+    padding: 30px;
+
+    margin-bottom: 25px;
+
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #e91e63,
+        #f06292
+    );
+
+    color: white;
+}
+
+.dashboard-welcome h1 {
+    margin-bottom: 10px;
+
+    font-size: 27px;
+}
+
+.dashboard-welcome p {
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    opacity: 0.95;
+}
+
+
+/* GRID */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+
+/* CARD */
+
+.dashboard-card {
+    min-height: 220px;
+
+    padding: 24px;
+
+    background-color: white;
+
+    border: 1px solid #eeeeee;
+
+    border-radius: 12px;
+
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+
+    transition: 0.2s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow: 0 7px 24px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card-icon {
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background-color: #fde7ef;
+
+    font-size: 24px;
+}
+
+.dashboard-card-content span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 12px;
+
+    color: #999999;
+}
+
+.dashboard-card-content h3 {
+    margin-bottom: 10px;
+
+    font-size: 18px;
+
+    color: var(--text-dark);
+}
+
+.dashboard-card-content p {
+    min-height: 42px;
+
+    margin-bottom: 20px;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    color: var(--text-gray);
+}
+
+.dashboard-card-content a {
+    color: var(--primary-color);
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.dashboard-card-content a:hover {
+    text-decoration: underline;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* =========================================
+   ADMIN - KELOLA PRODUK
+========================================= */
+
+.admin-page-header {
+    margin-bottom: 24px;
+}
+
+.admin-page-header h1 {
+    margin-bottom: 6px;
+    font-size: 26px;
+}
+
+.admin-page-header p {
+    color: var(--text-gray);
+    font-size: 14px;
+}
+
+
+/* CARD */
+
+.admin-card {
+    background-color: #ffffff;
+
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+
+    padding: 24px;
+    margin-bottom: 25px;
+
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+
+.admin-card h3 {
+    margin-bottom: 20px;
+
+    font-size: 18px;
+}
+
+
+/* FORM */
+
+.admin-form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+.admin-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-form-full {
+    grid-column: 1 / -1;
+}
+
+.admin-form-group label {
+    margin-bottom: 7px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.admin-form-group input,
+.admin-form-group textarea {
+    width: 100%;
+
+    padding: 12px 13px;
+
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+.admin-form-group input:focus,
+.admin-form-group textarea:focus {
+    border-color: var(--primary-color);
+
+    box-shadow:
+        0 0 0 3px rgba(233,30,99,0.08);
+}
+
+.admin-form-group textarea {
+    resize: vertical;
+}
+
+
+/* BUTTON SIMPAN */
+
+.admin-btn-primary {
+    margin-top: 20px;
+
+    padding: 12px 22px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: var(--primary-color);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.admin-btn-primary:hover {
+    background-color: #d81b60;
+}
+
+
+/* TABLE */
+
+.admin-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.admin-table thead {
+    background-color: #fafafa;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 13px 12px;
+
+    text-align: left;
+
+    border-bottom: 1px solid #eeeeee;
+
+    font-size: 13px;
+}
+
+.admin-table th {
+    color: #555555;
+
+    font-weight: 600;
+}
+
+.admin-product-image {
+    width: 58px;
+    height: 58px;
+
+    object-fit: cover;
+
+    border-radius: 8px;
+}
+
+.admin-no-image {
+    color: #999999;
+
+    font-size: 12px;
+}
+
+
+/* HAPUS */
+
+.admin-btn-danger {
+    display: inline-block;
+
+    padding: 7px 11px;
+
+    border-radius: 6px;
+
+    background-color: #fff0f0;
+
+    color: #d32f2f;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-btn-danger:hover {
+    background-color: #d32f2f;
+
+    color: white;
+}
+
+.admin-empty {
+    padding: 30px !important;
+
+    text-align: center;
+
+    color: var(--text-gray);
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 800px) {
+
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-form-full {
+        grid-column: auto;
+    }
+}
+/* =========================================
+   ADMIN - KELOLA STOK
+========================================= */
+
+.admin-alert-success {
+    margin-bottom: 20px;
+    padding: 12px 15px;
+
+    border-radius: 8px;
+
+    background-color: #e8f5e9;
+    color: #2e7d32;
+
+    font-size: 13px;
+}
+
+.stock-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stock-form input {
+    width: 80px;
+
+    padding: 8px 10px;
+
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+
+    outline: none;
+}
+
+.stock-form input:focus {
+    border-color: var(--primary-color);
+}
+
+.stock-button {
+    margin-top: 0;
+
+    padding: 8px 12px;
+
+    font-size: 12px;
+}
+
+.stock-status {
+    display: inline-block;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.stock-safe {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.stock-low {
+    background-color: #fff8e1;
+    color: #f57f17;
+}
+
+.stock-empty {
+    background-color: #ffebee;
+    color: #c62828;
+}
+/* =========================================
+   ADMIN - DAFTAR PESANAN
+========================================= */
+
+.order-status {
+    display: inline-block;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.order-pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+}
+
+.order-diproses {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.order-dikirim {
+    background-color: #ede7f6;
+    color: #5e35b1;
+}
+
+.order-selesai {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.order-dibatalkan {
+    background-color: #ffebee;
+    color: #c62828;
+}
+.admin-product-image {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.admin-no-image {
+    color: #999;
+    font-size: 12px;
+}
