@@ -72,5 +72,28 @@ class UserModel
 
         return false;
     }
+
+    // =========================
+    // AMBIL USER BERDASARKAN ID
+    // =========================
+    public function getUserById($id)
+    {
+        $query = "SELECT id, nama, email, alamat, no_telp, role
+                  FROM " . $this->table_name . "
+                  WHERE id = :id
+                  LIMIT 1";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindValue(
+            ':id',
+            $id,
+            PDO::PARAM_INT
+        );
+
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 ?>

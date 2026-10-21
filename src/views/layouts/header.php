@@ -13,10 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <title>BeliLapak - Katalog Produk</title>
 
-    <link
-        rel="stylesheet"
-        href="/BeliLapak/src/static/css/style.css"
-    >
+    <link rel="stylesheet" href="/BeliLapak/src/static/css/style.css?v=<?= time(); ?>">
 </head>
 
 <body>
