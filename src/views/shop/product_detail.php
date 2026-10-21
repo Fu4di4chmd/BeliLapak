@@ -51,7 +51,7 @@
                 
                 <!-- PERBAIKAN: Tambahan padding & background pada frame gambar, dan max-width pada img -->
                 <div class="product-image-gallery" style="background: #fdfdfd; padding: 20px; border-radius: 12px; border: 1px solid #eee; text-align: center;">
-                    <img src="static/uploads/<?php echo !empty($produk['gambar']) ? htmlspecialchars($produk['gambar']) : 'default.jpg'; ?>" 
+                    <img src="static/uploads/uploads/<?php echo !empty($produk['gambar']) ? htmlspecialchars($produk['gambar']) : 'default.jpg'; ?>" 
                          alt="<?php echo htmlspecialchars($produk['nama_produk']); ?>" 
                          style="width: 100%; max-width: 320px; height: auto; object-fit: contain; border-radius: 8px;">
                 </div>

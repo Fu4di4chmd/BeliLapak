@@ -77,6 +77,26 @@ switch ($action) {
         $controller = new CartController();
         $controller->remove($_GET['id']);
         break;
+    case 'profile':
+        require_once __DIR__ . '/views/auth/profile.php';
+        break;
+    case 'manage_stock':
+    require_once __DIR__ . '/controllers/AdminController.php';
+    $admin = new AdminController();
+    $admin->stock();
+    break;
+
+    case 'update_stock':
+    require_once __DIR__ . '/controllers/AdminController.php';
+    $admin = new AdminController();
+    $admin->updateStock();
+    break;  
+    case 'order_list':
+    require_once __DIR__ . '/controllers/AdminController.php';
+
+    $admin = new AdminController();
+    $admin->orders();
+    break;
 
     default:
         echo "404 Halaman Tidak Ditemukan";
