@@ -109,7 +109,7 @@
                             <input type="checkbox" class="cart-checkbox" checked>
                             
                             <!-- Gambar (Gunakan fallback jika gambar tidak ada) -->
-                            <img src="static/uploads/<?php echo !empty($item['gambar']) ? htmlspecialchars($item['gambar']) : 'default.jpg'; ?>" 
+                            <img src="static/uploads/uploads/<?php echo !empty($item['gambar']) ? htmlspecialchars($item['gambar']) : 'default.jpg'; ?>" 
                                  alt="<?php echo htmlspecialchars($item['nama_produk']); ?>" 
                                  style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #eee;">
                             
