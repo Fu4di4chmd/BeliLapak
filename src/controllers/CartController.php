@@ -31,10 +31,15 @@ class CartController
         require_once __DIR__ . '/../views/shop/cart.php';
     }
 
-    public function add($id)
+    public function add($id = null)
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
+        }
+
+        // Ambil ID dari POST jika tidak ada di parameter URL (karena kita pakai form)
+        if (!$id && isset($_POST['id'])) {
+            $id = $_POST['id'];
         }
 
         $produk = $this->productModel->getProductById($id);
@@ -48,19 +53,33 @@ class CartController
             $_SESSION['cart'] = [];
         }
 
+        // Ambil jumlah dari form, jika tidak ada default ke 1
+        $jumlah = isset($_POST['jumlah']) ? (int)$_POST['jumlah'] : 1;
+
         if (isset($_SESSION['cart'][$id])) {
-            $_SESSION['cart'][$id]['jumlah']++;
+            $_SESSION['cart'][$id]['jumlah'] += $jumlah;
         } else {
             $_SESSION['cart'][$id] = [
                 'id' => $produk['id'],
                 'nama_produk' => $produk['nama_produk'],
                 'harga' => $produk['harga'],
                 'gambar' => $produk['gambar'] ?? '',
-                'jumlah' => 1
+                'jumlah' => $jumlah
             ];
         }
 
-        header('Location: index.php?action=cart');
+        // ----------------------------------------------------
+        // LOGIKA PENENTUAN ARAH HALAMAN (REDIRECT)
+        // ----------------------------------------------------
+        $action_type = $_POST['action_type'] ?? 'cart';
+
+        if ($action_type === 'buy_now') {
+            // Jika tombol 'Beli Sekarang' ditekan
+            header('Location: index.php?action=checkout');
+        } else {
+            // Jika tombol '+ Keranjang' ditekan
+            header('Location: index.php?action=cart');
+        }
         exit;
     }
 

@@ -131,7 +131,7 @@ switch ($action) {
 
 
     // =========================
-    // CHECKOUT
+    // CHECKOUT & PESANAN
     // =========================
 
     case 'checkout':
@@ -139,6 +139,16 @@ switch ($action) {
 
         $controller = new CheckoutController();
         $controller->index();
+        break;
+
+    case 'process_checkout':
+        require_once __DIR__ . '/controllers/CheckoutController.php';
+        $controller = new CheckoutController();
+        $controller->process();
+        break;
+
+    case 'order_status':
+        require_once __DIR__ . '/views/shop/order_status.php';
         break;
 
 
