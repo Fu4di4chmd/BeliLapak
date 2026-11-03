@@ -72,14 +72,23 @@
                         <p><?php echo nl2br(htmlspecialchars($produk['deskripsi'] ?? 'Deskripsi produk belum tersedia.')); ?></p>
                     </div>
 
-                    <div class="product-actions" style="display: flex; gap: 15px;">
-                        <a href="index.php?action=cart_add&id=<?php echo $produk['id']; ?>" class="btn-outline-pink">
+                    <form action="index.php?action=cart_add" method="POST" class="product-actions" style="display: flex; gap: 15px; width: 100%;">
+                        <!-- Mengirim ID produk -->
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($produk['id']); ?>">
+                        
+                        <!-- Default jumlah barang = 1 -->
+                        <input type="hidden" name="jumlah" value="1">
+                        
+                        <!-- Tombol Keranjang -->
+                        <button type="submit" name="action_type" value="cart" class="btn-outline-pink" style="cursor: pointer; border: 2px solid #e0145c;">
                             + Keranjang
-                        </a>
-                        <a href="index.php?action=checkout&id=<?php echo $produk['id']; ?>" class="btn-solid-pink">
+                        </button>
+                        
+                        <!-- Tombol Beli Sekarang -->
+                        <button type="submit" name="action_type" value="buy_now" class="btn-solid-pink" style="cursor: pointer; border: 2px solid #e0145c;">
                             Beli Sekarang
-                        </a>
-                    </div>
+                        </button>
+                    </form>
                 </div>
 
             </div>

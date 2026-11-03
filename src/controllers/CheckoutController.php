@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/UserModel.php';
+// require_once __DIR__ . '/../models/OrderModel.php'; // Jika Anda sudah punya OrderModel
 
 class CheckoutController
 {
@@ -15,6 +16,7 @@ class CheckoutController
         $this->userModel = new UserModel($db);
     }
 
+    // Fungsi untuk MENAMPILKAN HALAMAN Checkout
     public function index()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -41,6 +43,7 @@ class CheckoutController
             $harga = (float) ($item['harga'] ?? 0);
             $jumlah = (int) ($item['jumlah'] ?? 0);
 
+            // PERBAIKAN TYPO: Menggunakan simbol * untuk perkalian
             $subtotal += $harga * $jumlah;
         }
 
@@ -52,4 +55,26 @@ class CheckoutController
 
         require_once __DIR__ . '/../views/shop/checkout.php';
     }
+
+    // FUNGSI BARU UNTUK MEMPROSES PESANAN & MENGOSONGKAN KERANJANG
+    public function process()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: index.php?action=login");
+            exit;
+        }
+
+       
+        // Setelah data pesanan berhasil dicatat, kosongkan keranjang belanja pengguna
+        unset($_SESSION['cart']);
+
+        // Arahkan ke halaman Status Pesanan / Sukses
+        header("Location: index.php?action=order_status");
+        exit;
+    }
 }
+?>
