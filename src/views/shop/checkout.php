@@ -19,14 +19,9 @@ require_once __DIR__ . '/../layouts/header.php';
             </a>
         </div>
 
-        <h1 class="checkout-title">
-            Checkout
-        </h1>
+        <h1 class="checkout-title">Checkout</h1>
 
-        <form
-            action="index.php?action=process_checkout"
-            method="POST"
-        >
+        <form action="index.php?action=process_checkout" method="POST">
 
             <div class="checkout-grid">
 
@@ -35,112 +30,85 @@ require_once __DIR__ . '/../layouts/header.php';
 
                     <!-- ALAMAT PENGIRIMAN -->
                     <div class="checkout-card">
-
                         <h2>Alamat Pengiriman</h2>
 
                         <div class="checkout-form-group">
-
-                            <label for="nama_penerima">
-                                Nama Penerima
-                            </label>
-
+                            <label for="nama_penerima">Nama Penerima</label>
                             <input
                                 type="text"
                                 id="nama_penerima"
                                 name="nama_penerima"
-                                value="<?= htmlspecialchars(
-                                    $user['nama'] ?? '',
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                ); ?>"
+                                value="<?= htmlspecialchars($user['nama'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                                 required
                             >
-
                         </div>
 
                         <div class="checkout-form-group">
-
-                            <label for="no_telp_penerima">
-                                Nomor Telepon
-                            </label>
-
+                            <label for="no_telp_penerima">Nomor Telepon</label>
                             <input
                                 type="tel"
                                 id="no_telp_penerima"
                                 name="no_telp_penerima"
-                                value="<?= htmlspecialchars(
-                                    $user['no_telp'] ?? '',
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                ); ?>"
+                                value="<?= htmlspecialchars($user['no_telp'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                                 required
                             >
-
                         </div>
 
                         <div class="checkout-form-group">
-
-                            <label for="alamat_pengiriman">
-                                Alamat Lengkap
-                            </label>
-
+                            <label for="alamat_pengiriman">Alamat Lengkap</label>
                             <textarea
                                 id="alamat_pengiriman"
                                 name="alamat_pengiriman"
                                 rows="4"
                                 required
-                            ><?= htmlspecialchars(
-                                $user['alamat'] ?? '',
-                                ENT_QUOTES,
-                                'UTF-8'
-                            ); ?></textarea>
-
+                            ><?= htmlspecialchars($user['alamat'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
                         </div>
-
                     </div>
 
-
                     <!-- PENGIRIMAN -->
-                    <div class="checkout-card">
-
+                    <div class="checkout-card" style="margin-top: 20px;">
                         <h2>Pengiriman</h2>
 
                         <div class="checkout-form-group">
-
-                            <label for="kurir">
-                                Pilih Kurir
-                            </label>
+                            <label for="pilihan-kurir">Pilih Kurir</label>
 
                             <select
-                                id="kurir"
                                 name="kurir"
+                                id="pilihan-kurir"
+                                onchange="hitungTotal()"
                                 required
                             >
-
-                                <option value="">
-                                    Pilih kurir
-                                </option>
-
-                                <option value="JNE">
-                                    JNE
-                                </option>
-
-                                <option value="J&T">
-                                    J&T
-                                </option>
-
-                                <option value="SiCepat">
-                                    SiCepat
-                                </option>
-
+                                <option value="" data-ongkir="0">Pilih kurir</option>
+                                <option value="JNE" data-ongkir="18000">JNE Reguler (Rp18.000)</option>
+                                <option value="J&T" data-ongkir="15000">J&T Express (Rp15.000)</option>
+                                <option value="SiCepat" data-ongkir="20000">SiCepat (Rp20.000)</option>
+                                <option value="Lokal_Bangkalan" data-ongkir="5000">Kurir Lokal Area Bangkalan (Rp5.000)</option>
                             </select>
-
                         </div>
+                    </div>
 
+                    <!-- METODE PEMBAYARAN -->
+                    <div class="checkout-card" style="margin-top: 20px;">
+                        <h2>Metode Pembayaran</h2>
+
+                        <div class="checkout-form-group">
+                            <label for="metode_pembayaran">Pilih Pembayaran</label>
+
+                            <select
+                                name="metode_pembayaran"
+                                id="metode_pembayaran"
+                                required
+                            >
+                                <option value="">Pilih metode pembayaran</option>
+                                <option value="transfer_bca">Transfer Bank BCA</option>
+                                <option value="transfer_mandiri">Transfer Bank Mandiri</option>
+                                <option value="qris">QRIS (Gopay/OVO/Dana)</option>
+                                <option value="cod">Bayar di Tempat (COD)</option>
+                            </select>
+                        </div>
                     </div>
 
                 </div>
-
 
                 <!-- BAGIAN KANAN -->
                 <div>
@@ -149,100 +117,63 @@ require_once __DIR__ . '/../layouts/header.php';
 
                         <h2>Ringkasan Pesanan</h2>
 
-                        <!-- PRODUK DI KERANJANG -->
+                        <!-- PRODUK -->
                         <?php if (!empty($cartItems)): ?>
 
                             <?php foreach ($cartItems as $item): ?>
 
                                 <div class="checkout-summary-row">
-
                                     <span>
-                                        <?= htmlspecialchars(
-                                            $item['nama_produk'] ?? '',
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
-
+                                        <?= htmlspecialchars($item['nama_produk'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
                                         × <?= (int) ($item['jumlah'] ?? 0); ?>
                                     </span>
 
                                     <strong>
                                         Rp<?= number_format(
-                                            (float) ($item['harga'] ?? 0)
-                                            * (int) ($item['jumlah'] ?? 0),
+                                            (float) ($item['harga'] ?? 0) * (int) ($item['jumlah'] ?? 0),
                                             0,
                                             ',',
                                             '.'
                                         ); ?>
                                     </strong>
-
                                 </div>
 
                             <?php endforeach; ?>
 
                         <?php else: ?>
 
-                            <p class="checkout-empty">
-                                Keranjang masih kosong.
-                            </p>
+                            <p class="checkout-empty">Keranjang masih kosong.</p>
 
                         <?php endif; ?>
 
-
                         <!-- SUBTOTAL -->
-                        <div class="checkout-summary-row">
-
+                        <div class="checkout-summary-row" style="margin-top: 15px;">
                             <span>Subtotal</span>
 
-                            <strong>
-                                Rp<?= number_format(
-                                    $subtotal ?? 0,
-                                    0,
-                                    ',',
-                                    '.'
-                                ); ?>
+                            <strong
+                                id="angka-subtotal"
+                                data-subtotal="<?= (float) ($subtotal ?? 0); ?>"
+                            >
+                                Rp<?= number_format($subtotal ?? 0, 0, ',', '.'); ?>
                             </strong>
-
                         </div>
-
 
                         <!-- ONGKIR -->
                         <div class="checkout-summary-row">
-
                             <span>Ongkos Kirim</span>
-
-                            <strong>
-                                Rp<?= number_format(
-                                    $ongkir ?? 0,
-                                    0,
-                                    ',',
-                                    '.'
-                                ); ?>
-                            </strong>
-
+                            <strong id="angka-ongkir">Rp0</strong>
                         </div>
-
 
                         <!-- TOTAL -->
                         <div class="checkout-summary-row checkout-summary-total">
-
                             <span>Total</span>
-
-                            <strong>
-                                Rp<?= number_format(
-                                    $total ?? 0,
-                                    0,
-                                    ',',
-                                    '.'
-                                ); ?>
+                            <strong id="angka-total">
+                                Rp<?= number_format($subtotal ?? 0, 0, ',', '.'); ?>
                             </strong>
-
                         </div>
-
 
                         <!-- TOMBOL CHECKOUT -->
                         <div class="checkout-actions">
-
                             <button
                                 type="submit"
                                 class="checkout-button"
@@ -250,7 +181,6 @@ require_once __DIR__ . '/../layouts/header.php';
                             >
                                 Lanjut ke Pembayaran
                             </button>
-
                         </div>
 
                         <p class="checkout-note">
@@ -269,5 +199,27 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 
 </div>
+
+<!-- PERHITUNGAN ONGKOS KIRIM -->
+<script>
+function hitungTotal() {
+    const kurirSelect = document.getElementById('pilihan-kurir');
+    const opsiTerpilih = kurirSelect.options[kurirSelect.selectedIndex];
+
+    const ongkir = parseInt(opsiTerpilih.getAttribute('data-ongkir')) || 0;
+
+    const subtotalElement = document.getElementById('angka-subtotal');
+    const subtotal = parseFloat(subtotalElement.getAttribute('data-subtotal')) || 0;
+
+    const totalAkhir = subtotal + ongkir;
+
+    const formatRupiah = (angka) => {
+        return 'Rp' + angka.toLocaleString('id-ID');
+    };
+
+    document.getElementById('angka-ongkir').innerText = formatRupiah(ongkir);
+    document.getElementById('angka-total').innerText = formatRupiah(totalAkhir);
+}
+</script>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

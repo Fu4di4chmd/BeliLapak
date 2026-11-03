@@ -26,9 +26,7 @@ switch ($action) {
     case 'detail':
         require_once __DIR__ . '/controllers/CatalogController.php';
         $controller = new CatalogController();
-
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
         $controller->detail($id);
         break;
 
@@ -79,9 +77,7 @@ switch ($action) {
     case 'delete_product':
         require_once __DIR__ . '/controllers/AdminController.php';
         $admin = new AdminController();
-
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
         $admin->delete($id);
         break;
 
@@ -123,18 +119,14 @@ switch ($action) {
     case 'cart_add':
         require_once __DIR__ . '/controllers/CartController.php';
         $controller = new CartController();
-
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
         $controller->add($id);
         break;
 
     case 'cart_remove':
         require_once __DIR__ . '/controllers/CartController.php';
         $controller = new CartController();
-
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
         $controller->remove($id);
         break;
 
@@ -168,10 +160,10 @@ switch ($action) {
 
     case 'order_detail':
         require_once __DIR__ . '/controllers/OrderController.php';
+        $controller = new OrderController();
 
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-        $controller = new OrderController();
         $controller->detail($id);
         break;
 

@@ -19,9 +19,7 @@ class CheckoutController
         $this->orderModel = new OrderModel($db);
     }
 
-    // =================================
-    // MENAMPILKAN HALAMAN CHECKOUT
-    // =================================
+    // Menampilkan halaman checkout
     public function index()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -34,7 +32,6 @@ class CheckoutController
         }
 
         $userId = (int) $_SESSION['user_id'];
-
         $user = $this->userModel->getUserById($userId);
 
         $cartItems = $_SESSION['cart'] ?? [];
@@ -59,9 +56,7 @@ class CheckoutController
         require_once __DIR__ . '/../views/shop/checkout.php';
     }
 
-    // =================================
-    // MEMPROSES PESANAN
-    // =================================
+    // Memproses pesanan
     public function process()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -86,18 +81,53 @@ class CheckoutController
             exit;
         }
 
+        // Mengambil data penerima
+        $namaPenerima = trim($_POST['nama_penerima'] ?? '');
+        $noTelpPenerima = trim($_POST['no_telp_penerima'] ?? '');
+        $alamatPengiriman = trim($_POST['alamat_pengiriman'] ?? '');
         $kurir = trim($_POST['kurir'] ?? '');
+        $metodePembayaran = trim($_POST['metode_pembayaran'] ?? '');
 
-        if ($kurir === '') {
-            header("Location: index.php?action=checkout&error=kurir");
-            exit;
+        // Validasi data penerima
+        if (
+            $namaPenerima === '' ||
+            $noTelpPenerima === '' ||
+            $alamatPengiriman === ''
+        ) {
+            exit("Data penerima belum lengkap. Silakan kembali ke halaman checkout.");
         }
 
+        // Tarif pengiriman
+        $tarifKurir = [
+            'JNE' => 18000,
+            'J&T' => 15000,
+            'SiCepat' => 20000,
+            'Lokal_Bangkalan' => 5000
+        ];
+
+        if (!array_key_exists($kurir, $tarifKurir)) {
+            exit("Kurir tidak valid. Silakan kembali ke halaman checkout.");
+        }
+
+        // Validasi metode pembayaran
+        $metodePembayaranValid = [
+            'transfer_bca',
+            'transfer_mandiri',
+            'qris',
+            'cod'
+        ];
+
+        if (!in_array($metodePembayaran, $metodePembayaranValid, true)) {
+            exit("Metode pembayaran tidak valid.");
+        }
+
+        $ongkir = $tarifKurir[$kurir];
+
+        // Menghitung subtotal dan detail pesanan
         $details = [];
         $subtotal = 0;
 
         foreach ($cartItems as $item) {
-
             $productId = (int) (
                 $item['product_id'] ?? $item['id'] ?? 0
             );
@@ -118,39 +148,33 @@ class CheckoutController
             $subtotal += $harga * $jumlah;
         }
 
-        // Ongkos kirim sementara
-        $ongkir = 0;
-
         $total = $subtotal + $ongkir;
-
         $tanggal = date('Y-m-d H:i:s');
 
         try {
-
             $orderId = $this->orderModel->createOrder(
                 $userId,
                 $tanggal,
                 $total,
                 $ongkir,
                 $kurir,
+                $metodePembayaran,
+                $namaPenerima,
+                $noTelpPenerima,
+                $alamatPengiriman,
                 $details
             );
 
-            // Kosongkan keranjang setelah pesanan tersimpan
+            // Keranjang dikosongkan setelah pesanan berhasil disimpan
             unset($_SESSION['cart']);
 
-            header(
-                "Location: index.php?action=my_orders&success=1"
-            );
+            header("Location: index.php?action=my_orders&success=1");
             exit;
 
         } catch (Exception $e) {
-
             error_log("Gagal menyimpan pesanan: " . $e->getMessage());
 
-            exit(
-                "Pesanan gagal disimpan. Silakan periksa kembali data pesanan."
-            );
+            exit("Pesanan gagal disimpan. Silakan periksa kembali data pesanan.");
         }
     }
 }

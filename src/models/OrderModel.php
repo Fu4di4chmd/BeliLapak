@@ -13,18 +13,49 @@ class OrderModel
     // =================================
     // MENYIMPAN PESANAN
     // =================================
-    public function createOrder($userId, $tanggal, $total, $ongkir, $kurir, $details)
-    {
+    public function createOrder(
+        $userId,
+        $tanggal,
+        $total,
+        $ongkir,
+        $kurir,
+        $metodePembayaran,
+        $namaPenerima,
+        $noTelpPenerima,
+        $alamatPengiriman,
+        $details
+    ) {
         try {
             $this->conn->beginTransaction();
 
             $query = "INSERT INTO orders
-                      (user_id, tanggal_pesanan, total_belanja,
-                       ongkos_kirim, kurir, status_pembayaran,
-                       status_pesanan)
+                      (
+                        user_id,
+                        tanggal_pesanan,
+                        total_belanja,
+                        ongkos_kirim,
+                        kurir,
+                        status_pembayaran,
+                        status_pesanan,
+                        nama_penerima,
+                        no_telp_penerima,
+                        alamat_pengiriman,
+                        metode_pembayaran
+                      )
                       VALUES
-                      (:user_id, :tanggal, :total, :ongkir,
-                       :kurir, 'belum dibayar', 'menunggu konfirmasi')";
+                      (
+                        :user_id,
+                        :tanggal,
+                        :total,
+                        :ongkir,
+                        :kurir,
+                        'belum dibayar',
+                        'menunggu konfirmasi',
+                        :nama_penerima,
+                        :no_telp_penerima,
+                        :alamat_pengiriman,
+                        :metode_pembayaran
+                      )";
 
             $stmt = $this->conn->prepare($query);
 
@@ -33,7 +64,11 @@ class OrderModel
                 ':tanggal' => $tanggal,
                 ':total' => $total,
                 ':ongkir' => $ongkir,
-                ':kurir' => $kurir
+                ':kurir' => $kurir,
+                ':nama_penerima' => $namaPenerima,
+                ':no_telp_penerima' => $noTelpPenerima,
+                ':alamat_pengiriman' => $alamatPengiriman,
+                ':metode_pembayaran' => $metodePembayaran
             ]);
 
             $orderId = $this->conn->lastInsertId();
