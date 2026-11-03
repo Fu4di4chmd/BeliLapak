@@ -1,3 +1,4 @@
+
 <?php
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -9,14 +10,14 @@ require_once __DIR__ . '/../layouts/header.php';
 ?>
 
 <div class="checkout-page">
-     <div class="checkout-actions">
 
-                            <a href="index.php?action=cart" class="checkout-back">
-    ← Kembali ke Keranjang
-</a>
-
-                            
     <div class="checkout-container">
+
+        <div class="checkout-actions">
+            <a href="index.php?action=cart" class="checkout-back">
+                ← Kembali ke Keranjang
+            </a>
+        </div>
 
         <h1 class="checkout-title">
             Checkout
@@ -39,12 +40,13 @@ require_once __DIR__ . '/../layouts/header.php';
 
                         <div class="checkout-form-group">
 
-                            <label>
+                            <label for="nama_penerima">
                                 Nama Penerima
                             </label>
 
                             <input
                                 type="text"
+                                id="nama_penerima"
                                 name="nama_penerima"
                                 value="<?= htmlspecialchars(
                                     $user['nama'] ?? '',
@@ -56,15 +58,15 @@ require_once __DIR__ . '/../layouts/header.php';
 
                         </div>
 
-
                         <div class="checkout-form-group">
 
-                            <label>
+                            <label for="no_telp_penerima">
                                 Nomor Telepon
                             </label>
 
                             <input
-                                type="text"
+                                type="tel"
+                                id="no_telp_penerima"
                                 name="no_telp_penerima"
                                 value="<?= htmlspecialchars(
                                     $user['no_telp'] ?? '',
@@ -76,14 +78,14 @@ require_once __DIR__ . '/../layouts/header.php';
 
                         </div>
 
-
                         <div class="checkout-form-group">
 
-                            <label>
+                            <label for="alamat_pengiriman">
                                 Alamat Lengkap
                             </label>
 
                             <textarea
+                                id="alamat_pengiriman"
                                 name="alamat_pengiriman"
                                 rows="4"
                                 required
@@ -105,11 +107,12 @@ require_once __DIR__ . '/../layouts/header.php';
 
                         <div class="checkout-form-group">
 
-                            <label>
+                            <label for="kurir">
                                 Pilih Kurir
                             </label>
 
                             <select
+                                id="kurir"
                                 name="kurir"
                                 required
                             >
@@ -144,10 +147,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
                     <div class="checkout-card">
 
-                        <h2>
-                            Ringkasan Pesanan
-                        </h2>
-
+                        <h2>Ringkasan Pesanan</h2>
 
                         <!-- PRODUK DI KERANJANG -->
                         <?php if (!empty($cartItems)): ?>
@@ -192,9 +192,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         <!-- SUBTOTAL -->
                         <div class="checkout-summary-row">
 
-                            <span>
-                                Subtotal
-                            </span>
+                            <span>Subtotal</span>
 
                             <strong>
                                 Rp<?= number_format(
@@ -211,9 +209,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         <!-- ONGKIR -->
                         <div class="checkout-summary-row">
 
-                            <span>
-                                Ongkos Kirim
-                            </span>
+                            <span>Ongkos Kirim</span>
 
                             <strong>
                                 Rp<?= number_format(
@@ -230,9 +226,7 @@ require_once __DIR__ . '/../layouts/header.php';
                         <!-- TOTAL -->
                         <div class="checkout-summary-row checkout-summary-total">
 
-                            <span>
-                                Total
-                            </span>
+                            <span>Total</span>
 
                             <strong>
                                 Rp<?= number_format(
@@ -246,11 +240,8 @@ require_once __DIR__ . '/../layouts/header.php';
                         </div>
 
 
-                        <!-- TOMBOL -->
-                         
+                        <!-- TOMBOL CHECKOUT -->
                         <div class="checkout-actions">
-
-                           
 
                             <button
                                 type="submit"
@@ -261,6 +252,11 @@ require_once __DIR__ . '/../layouts/header.php';
                             </button>
 
                         </div>
+
+                        <p class="checkout-note">
+                            Pastikan alamat dan nomor telepon penerima
+                            sudah benar sebelum melanjutkan pesanan.
+                        </p>
 
                     </div>
 
@@ -273,3 +269,5 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 
 </div>
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
