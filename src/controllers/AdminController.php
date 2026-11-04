@@ -1,3 +1,4 @@
+
 <?php
 
 require_once __DIR__ . '/../config/database.php';
@@ -15,7 +16,7 @@ class AdminController
         $db = $database->getConnection();
 
         $this->productModel = new ProductModel($db);
-         $this->orderModel = new OrderModel($db);
+        $this->orderModel = new OrderModel($db);
     }
 
     // =========================
@@ -39,10 +40,10 @@ class AdminController
         }
 
         $nama_produk = trim($_POST['nama_produk'] ?? '');
-        $deskripsi   = trim($_POST['deskripsi'] ?? '');
-        $harga       = (int) ($_POST['harga'] ?? 0);
-        $stok        = (int) ($_POST['stok'] ?? 0);
-        $berat_gram  = (int) ($_POST['berat_gram'] ?? 0);
+        $deskripsi = trim($_POST['deskripsi'] ?? '');
+        $harga = (int) ($_POST['harga'] ?? 0);
+        $stok = (int) ($_POST['stok'] ?? 0);
+        $berat_gram = (int) ($_POST['berat_gram'] ?? 0);
 
         $gambar = '';
 
@@ -50,22 +51,21 @@ class AdminController
             isset($_FILES['gambar']) &&
             $_FILES['gambar']['error'] === UPLOAD_ERR_OK
         ) {
-            $fileTmpPath = $_FILES['gambar']['tmp_name'];
-
-            $fileName =
-                time() . '_' .
+            $fileName = time() . '_' .
                 basename($_FILES['gambar']['name']);
 
-            $uploadDir =
-                __DIR__ . '/../static/uploads/';
+            $uploadDir = __DIR__ . '/../static/uploads/';
 
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
 
-            $destPath = $uploadDir . $fileName;
-
-            if (move_uploaded_file($fileTmpPath, $destPath)) {
+            if (
+                move_uploaded_file(
+                    $_FILES['gambar']['tmp_name'],
+                    $uploadDir . $fileName
+                )
+            ) {
                 $gambar = $fileName;
             }
         }
@@ -94,10 +94,10 @@ class AdminController
         }
 
         $nama_produk = trim($_POST['nama_produk'] ?? '');
-        $deskripsi   = trim($_POST['deskripsi'] ?? '');
-        $harga       = (int) ($_POST['harga'] ?? 0);
-        $stok        = (int) ($_POST['stok'] ?? 0);
-        $berat_gram  = (int) ($_POST['berat_gram'] ?? 0);
+        $deskripsi = trim($_POST['deskripsi'] ?? '');
+        $harga = (int) ($_POST['harga'] ?? 0);
+        $stok = (int) ($_POST['stok'] ?? 0);
+        $berat_gram = (int) ($_POST['berat_gram'] ?? 0);
 
         $gambar_baru = null;
 
@@ -105,23 +105,19 @@ class AdminController
             isset($_FILES['gambar']) &&
             $_FILES['gambar']['error'] === UPLOAD_ERR_OK
         ) {
-            $fileName =
-                time() . '_' .
+            $fileName = time() . '_' .
                 basename($_FILES['gambar']['name']);
 
-            $uploadDir =
-                __DIR__ . '/../static/uploads/';
+            $uploadDir = __DIR__ . '/../static/uploads/';
 
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
 
-            $destPath = $uploadDir . $fileName;
-
             if (
                 move_uploaded_file(
                     $_FILES['gambar']['tmp_name'],
-                    $destPath
+                    $uploadDir . $fileName
                 )
             ) {
                 $gambar_baru = $fileName;
@@ -175,13 +171,8 @@ class AdminController
             exit;
         }
 
-        $id = isset($_POST['id'])
-            ? (int) $_POST['id']
-            : 0;
-
-        $stok = isset($_POST['stok'])
-            ? (int) $_POST['stok']
-            : 0;
+        $id = (int) ($_POST['id'] ?? 0);
+        $stok = (int) ($_POST['stok'] ?? 0);
 
         if ($id > 0 && $stok >= 0) {
             $this->productModel->updateStock($id, $stok);
@@ -190,15 +181,76 @@ class AdminController
         header("Location: index.php?action=manage_stock&status=updated");
         exit;
     }
-    // =========================
-// DAFTAR PESANAN
-// =========================
-public function orders()
-{
-    $orders = $this->orderModel->getAllOrders();
 
-    require_once __DIR__ . '/../views/admin/order_list.php';
-}
+    // =========================
+    // DAFTAR PESANAN
+    // =========================
+    public function orders()
+    {
+        $orders = $this->orderModel->getAllOrders();
+
+        require_once __DIR__ . '/../views/admin/order_list.php';
+    }
+
+    // =========================
+    // UPDATE STATUS PESANAN
+    // =========================
+    public function updateOrderStatus()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?action=order_list");
+            exit;
+        }
+
+        $id = (int) ($_POST['id'] ?? 0);
+
+        $status = trim(
+            $_POST['status_pesanan'] ?? ''
+        );
+
+        $allowedStatus = [
+            'diproses',
+            'dikirim',
+            'selesai'
+        ];
+
+        if (
+            $id <= 0 ||
+            !in_array($status, $allowedStatus, true)
+        ) {
+            header("Location: index.php?action=order_list&error=invalid");
+            exit;
+        }
+
+        try {
+
+            $berhasil = $this->orderModel->updateStatusPesanan(
+                $id,
+                $status
+            );
+
+            if ($berhasil) {
+                header("Location: index.php?action=order_list&status=updated");
+                exit;
+            }
+
+            header("Location: index.php?action=order_list&error=failed");
+            exit;
+
+        } catch (PDOException $e) {
+
+            error_log(
+                "Gagal update status pesanan: " . $e->getMessage()
+            );
+
+            header("Location: index.php?action=order_list&error=failed");
+            exit;
+        }
+    }
 }
 
 ?>

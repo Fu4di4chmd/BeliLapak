@@ -172,10 +172,10 @@ class CheckoutController
             exit;
 
         } catch (Exception $e) {
-            error_log("Gagal menyimpan pesanan: " . $e->getMessage());
+    error_log("Gagal menyimpan pesanan: " . $e->getMessage());
 
-            exit("Pesanan gagal disimpan. Silakan periksa kembali data pesanan.");
-        }
+    exit("Detail error: " . $e->getMessage());
+}
     }
 }
 ?>

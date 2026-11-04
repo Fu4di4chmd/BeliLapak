@@ -28,8 +28,8 @@ class OrderModel
         try {
             $this->conn->beginTransaction();
 
-            $query = "INSERT INTO orders
-                      (
+            // SIMPAN DATA PESANAN
+            $query = "INSERT INTO orders (
                         user_id,
                         tanggal_pesanan,
                         total_belanja,
@@ -41,21 +41,19 @@ class OrderModel
                         no_telp_penerima,
                         alamat_pengiriman,
                         metode_pembayaran
-                      )
-                      VALUES
-                      (
+                    ) VALUES (
                         :user_id,
                         :tanggal,
                         :total,
                         :ongkir,
                         :kurir,
-                        'belum dibayar',
-                        'menunggu konfirmasi',
+                        'pending',
+                        'diproses',
                         :nama_penerima,
                         :no_telp_penerima,
                         :alamat_pengiriman,
                         :metode_pembayaran
-                      )";
+                    )";
 
             $stmt = $this->conn->prepare($query);
 
@@ -71,16 +69,26 @@ class OrderModel
                 ':metode_pembayaran' => $metodePembayaran
             ]);
 
+            // AMBIL ID PESANAN
             $orderId = $this->conn->lastInsertId();
 
-            $detailQuery = "INSERT INTO order_details
-                            (order_id, product_id, jumlah, harga_satuan)
-                            VALUES
-                            (:order_id, :product_id, :jumlah, :harga)";
+            // SIMPAN DETAIL PRODUK
+            $detailQuery = "INSERT INTO order_details (
+                                order_id,
+                                product_id,
+                                jumlah,
+                                harga_satuan
+                            ) VALUES (
+                                :order_id,
+                                :product_id,
+                                :jumlah,
+                                :harga
+                            )";
 
             $detailStmt = $this->conn->prepare($detailQuery);
 
             foreach ($details as $item) {
+
                 $detailStmt->execute([
                     ':order_id' => $orderId,
                     ':product_id' => $item['product_id'],
@@ -89,6 +97,7 @@ class OrderModel
                 ]);
             }
 
+            // SIMPAN TRANSAKSI
             $this->conn->commit();
 
             return $orderId;
@@ -108,9 +117,13 @@ class OrderModel
     // =================================
     public function getAllOrders()
     {
-        $query = "SELECT orders.*, users.nama, users.email
+        $query = "SELECT
+                    orders.*,
+                    users.nama,
+                    users.email
                   FROM orders
-                  INNER JOIN users ON orders.user_id = users.id
+                  INNER JOIN users
+                    ON orders.user_id = users.id
                   ORDER BY orders.id DESC";
 
         $stmt = $this->conn->prepare($query);
@@ -124,13 +137,18 @@ class OrderModel
     // =================================
     public function getOrderById($id)
     {
-        $query = "SELECT orders.*, users.nama, users.email
+        $query = "SELECT
+                    orders.*,
+                    users.nama,
+                    users.email
                   FROM orders
-                  INNER JOIN users ON orders.user_id = users.id
+                  INNER JOIN users
+                    ON orders.user_id = users.id
                   WHERE orders.id = :id
                   LIMIT 1";
 
         $stmt = $this->conn->prepare($query);
+
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -148,6 +166,7 @@ class OrderModel
                   ORDER BY id DESC";
 
         $stmt = $this->conn->prepare($query);
+
         $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -169,6 +188,7 @@ class OrderModel
                   WHERE order_details.order_id = :order_id";
 
         $stmt = $this->conn->prepare($query);
+
         $stmt->bindValue(':order_id', $orderId, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -180,18 +200,26 @@ class OrderModel
     // =================================
     public function updateStatusPesanan($id, $status)
     {
+        $statusValid = [
+            'diproses',
+            'dikirim',
+            'selesai'
+        ];
+
+        if (!in_array($status, $statusValid, true)) {
+            return false;
+        }
+
         $query = "UPDATE orders
                   SET status_pesanan = :status
                   WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->execute([
+        return $stmt->execute([
             ':status' => $status,
             ':id' => $id
         ]);
-
-        return $stmt->rowCount() >= 0;
     }
 
     // =================================
@@ -199,18 +227,26 @@ class OrderModel
     // =================================
     public function updateStatusPembayaran($id, $status)
     {
+        $statusValid = [
+            'pending',
+            'settlement',
+            'expire'
+        ];
+
+        if (!in_array($status, $statusValid, true)) {
+            return false;
+        }
+
         $query = "UPDATE orders
                   SET status_pembayaran = :status
                   WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->execute([
+        return $stmt->execute([
             ':status' => $status,
             ':id' => $id
         ]);
-
-        return $stmt->rowCount() >= 0;
     }
 }
 ?>
