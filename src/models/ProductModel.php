@@ -26,6 +26,114 @@ class ProductModel
     }
 
     // =========================
+    // FILTER & SEARCH PRODUK
+    // =========================
+    public function getFilteredProducts($search = '', $category = '', $limit = null)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE 1=1";
+        $params = [];
+
+        if (!empty($search)) {
+            $query .= " AND (nama_produk LIKE :search OR deskripsi LIKE :search)";
+            $params[':search'] = '%' . $search . '%';
+        }
+
+        if (!empty($category)) {
+            switch (strtolower($category)) {
+                case 'baju':
+                case 'kaos':
+                    $query .= " AND (nama_produk LIKE '%kaos%' OR nama_produk LIKE '%t-shirt%' OR nama_produk LIKE '%polo%' OR nama_produk LIKE '%baju%' OR nama_produk LIKE '%tunik%' OR nama_produk LIKE '%blouse%')";
+                    break;
+                case 'kemeja':
+                    $query .= " AND (nama_produk LIKE '%kemeja%' OR nama_produk LIKE '%oxford%' OR nama_produk LIKE '%flanel%')";
+                    break;
+                case 'celana':
+                    $query .= " AND (nama_produk LIKE '%celana%' OR nama_produk LIKE '%chino%' OR nama_produk LIKE '%jeans%' OR nama_produk LIKE '%cargo%' OR nama_produk LIKE '%sweatpants%' OR nama_produk LIKE '%jogger%' OR nama_produk LIKE '%ankle%')";
+                    break;
+                case 'jaket':
+                case 'outer':
+                    $query .= " AND (nama_produk LIKE '%jaket%' OR nama_produk LIKE '%hoodie%' OR nama_produk LIKE '%sweater%' OR nama_produk LIKE '%cardigan%' OR nama_produk LIKE '%bomber%' OR nama_produk LIKE '%parka%' OR nama_produk LIKE '%blazer%' OR nama_produk LIKE '%rompi%' OR nama_produk LIKE '%vest%')";
+                    break;
+                case 'batik':
+                    $query .= " AND (nama_produk LIKE '%batik%')";
+                    break;
+                case 'sepatu':
+                    $query .= " AND (nama_produk LIKE '%sepatu%' OR nama_produk LIKE '%sneakers%')";
+                    break;
+                default:
+                    $query .= " AND (nama_produk LIKE :cat OR deskripsi LIKE :cat)";
+                    $params[':cat'] = '%' . $category . '%';
+                    break;
+            }
+        }
+
+        $query .= " ORDER BY id DESC";
+
+        if ($limit !== null && (int)$limit > 0) {
+            $query .= " LIMIT " . (int)$limit;
+        }
+
+        $stmt = $this->conn->prepare($query);
+        foreach ($params as $key => $val) {
+            $stmt->bindValue($key, $val);
+        }
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // =========================
+    // HITUNG TOTAL PRODUK (UNTUK FILTER/SEARCH)
+    // =========================
+    public function getTotalProductsCount($search = '', $category = '')
+    {
+        $query = "SELECT COUNT(*) FROM " . $this->table_name . " WHERE 1=1";
+        $params = [];
+
+        if (!empty($search)) {
+            $query .= " AND (nama_produk LIKE :search OR deskripsi LIKE :search)";
+            $params[':search'] = '%' . $search . '%';
+        }
+
+        if (!empty($category)) {
+            switch (strtolower($category)) {
+                case 'baju':
+                case 'kaos':
+                    $query .= " AND (nama_produk LIKE '%kaos%' OR nama_produk LIKE '%t-shirt%' OR nama_produk LIKE '%polo%' OR nama_produk LIKE '%baju%' OR nama_produk LIKE '%tunik%' OR nama_produk LIKE '%blouse%')";
+                    break;
+                case 'kemeja':
+                    $query .= " AND (nama_produk LIKE '%kemeja%' OR nama_produk LIKE '%oxford%' OR nama_produk LIKE '%flanel%')";
+                    break;
+                case 'celana':
+                    $query .= " AND (nama_produk LIKE '%celana%' OR nama_produk LIKE '%chino%' OR nama_produk LIKE '%jeans%' OR nama_produk LIKE '%cargo%' OR nama_produk LIKE '%sweatpants%' OR nama_produk LIKE '%jogger%' OR nama_produk LIKE '%ankle%')";
+                    break;
+                case 'jaket':
+                case 'outer':
+                    $query .= " AND (nama_produk LIKE '%jaket%' OR nama_produk LIKE '%hoodie%' OR nama_produk LIKE '%sweater%' OR nama_produk LIKE '%cardigan%' OR nama_produk LIKE '%bomber%' OR nama_produk LIKE '%parka%' OR nama_produk LIKE '%blazer%' OR nama_produk LIKE '%rompi%' OR nama_produk LIKE '%vest%')";
+                    break;
+                case 'batik':
+                    $query .= " AND (nama_produk LIKE '%batik%')";
+                    break;
+                case 'sepatu':
+                    $query .= " AND (nama_produk LIKE '%sepatu%' OR nama_produk LIKE '%sneakers%')";
+                    break;
+                default:
+                    $query .= " AND (nama_produk LIKE :cat OR deskripsi LIKE :cat)";
+                    $params[':cat'] = '%' . $category . '%';
+                    break;
+            }
+        }
+
+        $stmt = $this->conn->prepare($query);
+        foreach ($params as $key => $val) {
+            $stmt->bindValue($key, $val);
+        }
+        $stmt->execute();
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    // =========================
     // AMBIL PRODUK BERDASARKAN ID
     // =========================
     public function getProductById($id)
