@@ -1920,9 +1920,26 @@ main {
 ========================= */
 
 .my-orders-page {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 20px;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 30px 40px;
+}
+
+.my-orders-page .btn-back-elegant {
+    padding: 0;
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 16px;
+}
+
+.my-orders-page .btn-back-elegant:hover {
+    background: transparent;
+    color: #e0145c;
+    transform: translateX(-4px);
+}
+
+.my-orders-header {
+    margin-bottom: 24px;
 }
 
 .my-orders-title {
@@ -1933,7 +1950,7 @@ main {
 
 .my-orders-desc {
     color: #777;
-    margin-bottom: 25px;
+    margin-bottom: 0;
 }
 
 .orders-card {
@@ -1948,6 +1965,7 @@ main {
 .orders-card-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
     gap: 10px;
     border-bottom: 1px solid #eee;
@@ -1963,6 +1981,7 @@ main {
 .orders-info {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 12px 0;
     color: #555;
     gap: 15px;
@@ -1975,13 +1994,17 @@ main {
 }
 
 .orders-status {
-    display: inline-block;
-    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
     border-radius: 20px;
     background: #fff0f5;
     color: #e0145c;
     font-size: 12px;
     font-weight: bold;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 .orders-detail-btn {
@@ -2067,6 +2090,7 @@ main {
 .order-detail-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 20px;
     padding: 13px 0;
     border-bottom: 1px solid #f1f1f1;
@@ -2079,12 +2103,17 @@ main {
 }
 
 .order-detail-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: #fff0f5;
     color: #e0145c;
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 .order-product-row {

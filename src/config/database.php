@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('Asia/Jakarta');
+
 class Database {
     private $host = "localhost";
     private $db_name = "belilapak_db";
@@ -12,6 +14,7 @@ class Database {
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
             // Set error mode ke exception agar error SQL mudah dilacak
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->conn->exec("SET time_zone = '+07:00'");
         } catch(PDOException $exception) {
             echo "Koneksi Database Gagal: " . $exception->getMessage();
         }

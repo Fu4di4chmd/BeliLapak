@@ -230,21 +230,55 @@ class OrderModel
         $statusValid = [
             'pending',
             'settlement',
-            'expire'
+            'expire',
+            'cancel'
         ];
 
         if (!in_array($status, $statusValid, true)) {
             return false;
         }
 
+        $query = ($status === 'settlement')
+            ? "UPDATE orders SET status_pembayaran = :status WHERE id = :id"
+            : "UPDATE orders SET status_pembayaran = :status WHERE id = :id AND status_pembayaran <> 'settlement'";
+
+        $stmt = $this->conn->prepare($query);
+
+        try {
+            return $stmt->execute([
+                ':status' => $status,
+                ':id' => $id
+            ]);
+        } catch (PDOException $e) {
+            // Jika kolom enum di database hanya ('pending','settlement','expire'), petakan cancel -> expire.
+            if ($status === 'cancel') {
+                return $stmt->execute([
+                    ':status' => 'expire',
+                    ':id' => $id
+                ]);
+            }
+            throw $e;
+        }
+    }
+
+    // =================================
+    // SIMPAN DATA TRANSAKSI MIDTRANS
+    // =================================
+    public function savePaymentToken($id, $midtransOrderId, $snapToken = null)
+    {
+        $payload = json_encode([
+            'order_id' => $midtransOrderId,
+            'snap_token' => $snapToken
+        ]);
+
         $query = "UPDATE orders
-                  SET status_pembayaran = :status
+                  SET payment_token = :payment_token
                   WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
 
         return $stmt->execute([
-            ':status' => $status,
+            ':payment_token' => $payload,
             ':id' => $id
         ]);
     }

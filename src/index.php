@@ -1,6 +1,8 @@
 
 <?php
 
+date_default_timezone_set('Asia/Jakarta');
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -145,6 +147,40 @@ switch ($action) {
         require_once __DIR__ . '/controllers/CheckoutController.php';
         $controller = new CheckoutController();
         $controller->process();
+        break;
+
+    case 'shipping_destinations':
+        require_once __DIR__ . '/controllers/ShippingController.php';
+        (new ShippingController())->searchDestination();
+        break;
+
+    case 'shipping_cost':
+        require_once __DIR__ . '/controllers/ShippingController.php';
+        (new ShippingController())->calculateCost();
+        break;
+
+
+    // =========================
+    // MIDTRANS
+    // =========================
+    case 'pay_order':
+        require_once __DIR__ . '/controllers/PaymentController.php';
+        (new PaymentController())->retry((int)($_GET['id'] ?? 0));
+        break;
+
+    case 'payment_finish':
+        require_once __DIR__ . '/controllers/PaymentController.php';
+        (new PaymentController())->finish();
+        break;
+
+    case 'check_payment':
+        require_once __DIR__ . '/controllers/PaymentController.php';
+        (new PaymentController())->checkStatus((int)($_GET['id'] ?? 0));
+        break;
+
+    case 'poll_payment':
+        require_once __DIR__ . '/controllers/PaymentController.php';
+        (new PaymentController())->pollStatus((int)($_GET['id'] ?? 0));
         break;
 
 
