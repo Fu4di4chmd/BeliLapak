@@ -11,6 +11,15 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <main class="my-orders-page">
 
+    <!-- TOMBOL KEMBALI -->
+    <a href="index.php?action=katalog" class="btn-back-elegant">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Kembali ke Katalog
+    </a>
+
     <!-- HEADER HALAMAN -->
     <div class="my-orders-header">
 
@@ -21,10 +30,6 @@ require_once __DIR__ . '/../layouts/header.php';
         <p class="my-orders-desc">
             Pantau pesanan dan pembayaran belanja kamu di BeliLapak.
         </p>
-
-        <a href="index.php?action=my_orders" class="order-back-btn">
-     Kembali ke Pesanan Saya
-            </a>
 
     </div>
 
@@ -180,6 +185,25 @@ require_once __DIR__ . '/../layouts/header.php';
                         Lihat Detail Pesanan 
                     </a>
 
+                    <?php if (($order['status_pembayaran'] ?? '') !== 'settlement'): ?>
+                        <a
+                            href="index.php?action=pay_order&id=<?= (int) $order['id']; ?>"
+                            data-order-id="<?= (int) $order['id']; ?>"
+                            class="orders-detail-btn js-continue-pay"
+                        >
+                            Lanjutkan Pembayaran
+                        </a>
+                        <?php if (($order['status_pembayaran'] ?? '') === 'pending'): ?>
+                            <a
+                                href="index.php?action=check_payment&id=<?= (int) $order['id']; ?>"
+                                class="orders-detail-btn"
+                                style="background:#555;"
+                            >
+                                Cek Status Pembayaran
+                            </a>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
                 </div>
 
             </div>
@@ -212,5 +236,14 @@ require_once __DIR__ . '/../layouts/header.php';
     <?php endif; ?>
 
 </main>
+
+<?php
+$isProduction = defined('MIDTRANS_IS_PRODUCTION') && MIDTRANS_IS_PRODUCTION;
+$snapJsUrl = $isProduction ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js';
+$clientKey = defined('MIDTRANS_CLIENT_KEY') ? MIDTRANS_CLIENT_KEY : '';
+?>
+<script src="<?= htmlspecialchars($snapJsUrl, ENT_QUOTES, 'UTF-8'); ?>" data-client-key="<?= htmlspecialchars($clientKey, ENT_QUOTES, 'UTF-8'); ?>"></script>
+<script src="/BeliLapak/src/static/js/midtrans-snap.js?v=1"></script>
+<script>window.BeliLapakMidtrans.bindContinuePayButtons();</script>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

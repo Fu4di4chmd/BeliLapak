@@ -51,8 +51,8 @@ if (session_status() === PHP_SESSION_NONE) {
                 Keranjang
             </a>
 
-            <a href="#">
-                Favorit
+            <a href="/BeliLapak/src/index.php?action=my_orders">
+                Pesanan
             </a>
 
             <?php if (isset($_SESSION['user_id'])): ?>

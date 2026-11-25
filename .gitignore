@@ -1,2 +1,5 @@
 .env
 node_modules/
+
+# Midtrans credentials
+/src/config/api_config.php

@@ -30,6 +30,19 @@ if (!$user) {
     echo "Data pengguna tidak ditemukan.";
     exit;
 }
+
+$defaultBackUrl = '/BeliLapak/src/index.php?action=katalog';
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if ($referer !== '') {
+    $refParts = parse_url($referer);
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    $sameHost = empty($refParts['host']) || strcasecmp($refParts['host'], $host) === 0;
+    $refPath = ($refParts['path'] ?? '') . (!empty($refParts['query']) ? '?' . $refParts['query'] : '');
+    if ($sameHost && $refPath !== '' && !str_contains($refPath, 'action=profile')) {
+        $_SESSION['profile_return_url'] = $refPath;
+    }
+}
+$backUrl = $_SESSION['profile_return_url'] ?? $defaultBackUrl;
 ?>
 
 <!DOCTYPE html>
@@ -141,10 +154,10 @@ if (!$user) {
     <div class="profile-actions">
 
         <a
-            href="/BeliLapak/src/index.php?action=katalog"
+            href="<?= htmlspecialchars($backUrl, ENT_QUOTES, 'UTF-8'); ?>"
             class="btn-primary"
         >
-            Kembali ke Katalog
+            Kembali
         </a>
 
         <a

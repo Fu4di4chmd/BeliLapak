@@ -240,6 +240,27 @@ $orderItems = $orderDetails ?? $details ?? $items ?? [];
                 </strong>
             </div>
 
+            <?php if (($orderData['status_pembayaran'] ?? '') !== 'settlement'): ?>
+                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+                    <a
+                        href="index.php?action=pay_order&id=<?= (int) $orderData['id']; ?>"
+                        data-order-id="<?= (int) $orderData['id']; ?>"
+                        class="orders-detail-btn js-continue-pay"
+                    >
+                        Lanjutkan Pembayaran
+                    </a>
+                    <?php if (($orderData['status_pembayaran'] ?? '') === 'pending'): ?>
+                        <a
+                            href="index.php?action=check_payment&id=<?= (int) $orderData['id']; ?>&from=detail"
+                            class="orders-detail-btn"
+                            style="background:#555;"
+                        >
+                            Cek Status Pembayaran
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+
         </div>
 
     <?php else: ?>
@@ -255,5 +276,14 @@ $orderItems = $orderDetails ?? $details ?? $items ?? [];
     <?php endif; ?>
 
 </main>
+
+<?php
+$isProduction = defined('MIDTRANS_IS_PRODUCTION') && MIDTRANS_IS_PRODUCTION;
+$snapJsUrl = $isProduction ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js';
+$clientKey = defined('MIDTRANS_CLIENT_KEY') ? MIDTRANS_CLIENT_KEY : '';
+?>
+<script src="<?= htmlspecialchars($snapJsUrl, ENT_QUOTES, 'UTF-8'); ?>" data-client-key="<?= htmlspecialchars($clientKey, ENT_QUOTES, 'UTF-8'); ?>"></script>
+<script src="/BeliLapak/src/static/js/midtrans-snap.js?v=1"></script>
+<script>window.BeliLapakMidtrans.bindContinuePayButtons();</script>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

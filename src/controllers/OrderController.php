@@ -2,6 +2,7 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/api_config.php';
 require_once __DIR__ . '/../models/OrderModel.php';
 
 class OrderController
@@ -32,6 +33,9 @@ class OrderController
 
         $orders = $this->orderModel->getOrdersByUser($userId);
 
+        require_once __DIR__ . '/PaymentController.php';
+        $orders = (new PaymentController())->syncPendingOrders($orders);
+
         require_once __DIR__ . '/../views/shop/orders.php';
     }
 
@@ -55,6 +59,12 @@ class OrderController
         if (!$order || (int) $order['user_id'] !== $userId) {
             http_response_code(404);
             exit("Pesanan tidak ditemukan.");
+        }
+
+        if (($order['metode_pembayaran'] ?? '') === 'midtrans' && ($order['status_pembayaran'] ?? '') === 'pending') {
+            require_once __DIR__ . '/PaymentController.php';
+            (new PaymentController())->syncSingleOrder($order);
+            $order = $this->orderModel->getOrderById($id);
         }
 
         $details = $this->orderModel->getOrderDetails($id);

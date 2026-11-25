@@ -189,6 +189,9 @@ class AdminController
     {
         $orders = $this->orderModel->getAllOrders();
 
+        require_once __DIR__ . '/PaymentController.php';
+        $orders = (new PaymentController())->syncPendingOrders($orders);
+
         require_once __DIR__ . '/../views/admin/order_list.php';
     }
 
