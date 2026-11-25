@@ -31,18 +31,18 @@ if (session_status() === PHP_SESSION_NONE) {
         </a>
 
         <!-- SEARCH -->
-        <div class="search-box">
-
+        <form action="/BeliLapak/src/index.php" method="GET" class="search-box">
+            <input type="hidden" name="action" value="katalog">
             <input
                 type="text"
-                placeholder="Cari barang yang kamu suka..."
+                name="q"
+                value="<?php echo isset($_GET['q']) ? htmlspecialchars($_GET['q']) : ''; ?>"
+                placeholder="Cari baju, celana, jaket, sepatu..."
             >
-
-            <button type="button">
+            <button type="submit">
                 Cari
             </button>
-
-        </div>
+        </form>
 
         <!-- NAVIGATION -->
         <div class="nav-links">
